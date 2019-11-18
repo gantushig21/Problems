@@ -2,23 +2,32 @@
 /*
 ID: gantush6
 LANG: JAVA
-TASK: palsquare
+TASK: dualpal
 */
 
 import java.io.*;
 import java.util.*;
 
-public class palsquare {
+public class dualpal {
 
     public static void main(String[] args) throws IOException {
-        FastScanner input = new FastScanner(new FileReader("palsquare.in"));
-        PrintWriter output = new PrintWriter(new BufferedWriter(new FileWriter("palsquare.out")));
+        FastScanner input = new FastScanner(new FileReader("dualpal.in"));
+        PrintWriter output = new PrintWriter(new BufferedWriter(new FileWriter("dualpal.out")));
 
-        int base = input.nextInt();
-        for (int i = 1; i < 301; i++) {
-            String baseNumber = baseConversion(i * i + "", 10, base);
-            if (isPalindrome(baseNumber))
-                output.println(baseConversion(i + "", 10, base).toUpperCase() + " " + baseNumber.toUpperCase());
+        int N = input.nextInt();
+        int S = input.nextInt();
+        int found = 0;
+        while (found < N) {
+            S++;
+            int count = 0, i = 2;
+            while (count < 2 && i < 11) {
+                if (isPalindrome(baseConversion(S + "", 10, i++)))
+                    count++;
+            }
+            if (count == 2) {
+                output.println(S);
+                found++;
+            }
         }
 
         output.close();
