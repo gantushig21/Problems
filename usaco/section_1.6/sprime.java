@@ -2,33 +2,50 @@
 /*
 ID: gantush6
 LANG: JAVA
-TASK: numtri
+TASK: sprime
 */
 
 import java.io.*;
 import java.util.*;
 
-public class numtri {
-    public static void main(String[] args) throws IOException {
-        FastScanner input = new FastScanner(new FileReader("numtri.in"));
-        PrintWriter output = new PrintWriter(new BufferedWriter(new FileWriter("numtri.out")));
+public class sprime {
+    static int N;
+    static List<Integer> primes = new ArrayList<>();
 
-        int n = input.nextInt();
-        int[] a = new int[n];
-        for (int i = 1; i <= n; i++) {
-            int previous = 0, temp;
-            for (int j = 0; j < i; j++) {
-                temp = a[j];
-                a[j] = Math.max(previous, a[j]) + input.nextInt();
-                previous = temp;
-            }
+    static boolean isPrime(int n) {
+        if (n < 2)
+            return false;
+
+        int k = (int) Math.sqrt(n);
+
+        for (int i = 2; i <= k; i++) {
+            if (n % i == 0)
+                return false;
         }
 
-        int highest = 0;
-        for (int i = 0; i < n; i++)
-            highest = Math.max(highest, a[i]);
+        return true;
+    }
 
-        output.println(highest);
+    static void recursive(int n, int length) {
+        if (length == N)
+            primes.add(n);
+
+        for (int i = length == 0 ? 1 : 0; i <= 9; i++) {
+            if (isPrime(n * 10 + i))
+                recursive(n * 10 + i, length + 1);
+        }
+    }
+
+    public static void main(String[] args) throws IOException {
+        FastScanner input = new FastScanner(new FileReader("sprime.in"));
+        PrintWriter output = new PrintWriter(new BufferedWriter(new FileWriter("sprime.out")));
+
+        N = input.nextInt();
+
+        recursive(0, 0);
+
+        for (Integer prime : primes)
+            output.println(prime);
 
         output.close();
     }
