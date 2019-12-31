@@ -2,34 +2,44 @@
 /*
 ID: gantush6
 LANG: JAVA
-TASK: inflate
+TASK: humble
 */
 
 import java.io.*;
 import java.util.*;
 import java.lang.*;
 
-public class inflate {
+public class humble {
     public static void main(String[] args) throws IOException {
-        FastScanner input = new FastScanner(new FileReader("inflate.in"));
-        PrintWriter output = new PrintWriter(new BufferedWriter(new FileWriter("inflate.out")));
+        FastScanner input = new FastScanner(new FileReader("humble.in"));
+        PrintWriter output = new PrintWriter(new BufferedWriter(new FileWriter("humble.out")));
 
-        int m = input.nextInt(), n = input.nextInt();
-        int[] points = new int[n];
-        int[] minutes = new int[n];
-        for (int i = 0; i < n; i++) {
-            points[i] = input.nextInt();
-            minutes[i] = input.nextInt();
+        int k = input.nextInt(), n = input.nextInt();
+        int[] primes = new int[k];
+        int[] indexes = new int[k];
+        for (int i = 0; i < k; i++)
+            primes[i] = input.nextInt();
+
+        int[] numbers = new int[n + 1];
+        numbers[0] = 1;
+
+        for (int i = 1; i <= n; i++) {
+            int min = Integer.MAX_VALUE;
+            int minIndex = -1;
+            for (int j = 0; j < k; j++) {
+                while (primes[j] * numbers[indexes[j]] <= numbers[i - 1])
+                    indexes[j]++;
+
+                if (primes[j] * numbers[indexes[j]] < min) {
+                    min = primes[j] * numbers[indexes[j]];
+                    minIndex = j;
+                }
+            }
+            numbers[i] = min;
+            indexes[minIndex]++;
         }
 
-        int[] A = new int[m + 1];
-        A[0] = 0;
-        for (int i = 0; i < n; i++) {
-            for (int j = minutes[i]; j <= m; j++)
-                A[j] = Math.max(A[j], A[j - minutes[i]] + points[i]);
-        }
-
-        output.println(A[m]);
+        output.println(numbers[n]);
         output.close();
     }
 
