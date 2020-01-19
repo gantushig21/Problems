@@ -9,12 +9,36 @@ import java.io.*;
 import java.util.*;
 
 public class kimbits {
+    final static int BIT_SIZE = 32;
     public static void main(String[] args) throws IOException {
         FastScanner input = new FastScanner(new FileReader("kimbits.in"));
         PrintWriter output = new PrintWriter(new BufferedWriter(new FileWriter("kimbits.out")));
 
-        int N = input.nextInt(), L = input.nextInt(), I = input.nextInt();
+        int[][] c = new int[BIT_SIZE][BIT_SIZE];
+        c[0][0] = 1;
+        for (int i = 1; i < BIT_SIZE; i++) {
+            c[i][0] = 1;
+            for (int j = 1; j < BIT_SIZE; j++)
+                c[i][j] = c[i - 1][j - 1] + c[i - 1][j];
+        }
+        for (int i = 0; i < BIT_SIZE; i++) {
+            for (int j = 1; j < BIT_SIZE; j++)
+                c[i][j] = c[i][j - 1] + c[i][j];
+        }
+        int N = input.nextInt(), L = input.nextInt();
+        long I = input.nextLong();
+        StringBuilder sb = new StringBuilder();
+        for (int i = N; i >= 1; i--) {
+            if (c[i - 1][L] >= I) {
+                sb.append("0");
+            } else {
+                sb.append("1");
+                I -= c[i - 1][L];
+                L--;
+            }
+        }
 
+        output.println(sb.toString());
         output.close();
     }
 
